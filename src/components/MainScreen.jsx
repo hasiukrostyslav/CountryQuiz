@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useCountries } from '../context/CountriesContext';
 import TopBar from './TopBar';
 import QuestionOptions from './QuestionOptions';
 import Footer from './Footer';
@@ -18,15 +19,15 @@ const QuestionContainer = styled.div`
 const ImgFlag = styled.img`
   width: 25rem;
   height: 15rem;
-  border: 1px solid #fff;
 `;
 
 function MainScreen() {
+  const { questions, index } = useCountries();
   return (
     <StyledMainScreen>
       <TopBar />
       <QuestionContainer>
-        <ImgFlag alt="Country Flag" src="" />
+        <ImgFlag alt="Country Flag" src={questions.at(index).countryFlag} />
         <QuestionOptions />
       </QuestionContainer>
       <Footer />

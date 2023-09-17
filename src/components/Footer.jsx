@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useCountries } from '../context/CountriesContext';
 import Button from './Button';
 import Timer from './Timer';
 
@@ -10,10 +11,21 @@ const StyledFooter = styled.footer`
 `;
 
 function Footer() {
+  const { questions, index, answer, dispatch } = useCountries();
+  const hasAnswered = answer !== null;
   return (
     <StyledFooter>
       <Timer />
-      <Button>Next</Button>
+      {index !== questions.length - 1 && hasAnswered && (
+        <Button onClick={() => dispatch({ type: 'quiz/nextQuestion' })}>
+          Next
+        </Button>
+      )}
+      {index === questions.length - 1 && hasAnswered && (
+        <Button onClick={() => dispatch({ type: 'quiz/finished' })}>
+          Check results
+        </Button>
+      )}
     </StyledFooter>
   );
 }

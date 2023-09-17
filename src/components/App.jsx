@@ -10,6 +10,7 @@ import FinishScreen from './FinishScreen';
 
 function App() {
   const { status } = useCountries();
+
   return (
     <>
       <GlobalStyles />

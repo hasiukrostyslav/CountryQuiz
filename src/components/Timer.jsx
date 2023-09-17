@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import styled from 'styled-components';
+import { useCountries } from '../context/CountriesContext';
 
 const StyledTimer = styled.div``;
 
 function Timer() {
-  useState();
-  return <StyledTimer>30</StyledTimer>;
+  const { secondsRemaining } = useCountries();
+  return <StyledTimer>{secondsRemaining}</StyledTimer>;
 }
 
 export default Timer;

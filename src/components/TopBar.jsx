@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useCountries } from '../context/CountriesContext';
 
 const StyledTopBar = styled.div`
   display: flex;
@@ -30,15 +31,17 @@ const Count = styled.span`
 `;
 
 function TopBar() {
+  const { questions, index, correctAnswers } = useCountries();
+
   return (
     <StyledTopBar>
       <QuestionText>Which country&apos;s flag is this?</QuestionText>
       <StatBox>
         <StatText>
-          <Count>4</Count> of <Count>30</Count>
+          <Count>{index + 1}</Count> of <Count>{questions.length}</Count>
         </StatText>
         <StatText>
-          Correct answers: <Count>4</Count>
+          Correct answers: <Count>{correctAnswers}</Count>
         </StatText>
       </StatBox>
     </StyledTopBar>

@@ -1,4 +1,5 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useEffect, useReducer } from 'react';
+import { getQuestions } from '../helper';
 
 const CountriesContext = createContext();
 
@@ -9,7 +10,7 @@ const initialState = {
   index: 0,
   answer: null,
   correctAnswers: 0,
-  highScore: 0,
+  bestResult: 0,
   secondsRemaining: null,
 };
 
@@ -21,10 +22,34 @@ function CountriesProvider({ children }) {
       index,
       answer,
       correctAnswers,
-      highScore,
+      bestResult,
       secondsRemaining,
     },
+    dispatch,
   ] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    async function fetchingCountries() {
+      try {
+        const res = await fetch('https://restcountries.com/v3.1/all');
+        if (!res.ok) throw new Error();
+
+        const data = await res.json();
+
+        const questions = getQuestions(data);
+
+        dispatch({
+          type: 'data/received',
+          payload: { countries: data, questions },
+        });
+      } catch (error) {
+        dispatch({ type: 'data/failed' });
+        console.log(error);
+      }
+    }
+
+    fetchingCountries();
+  }, []);
 
   return (
     <CountriesContext.Provider
@@ -34,8 +59,9 @@ function CountriesProvider({ children }) {
         index,
         answer,
         correctAnswers,
-        highScore,
+        bestResult,
         secondsRemaining,
+        dispatch,
       }}
     >
       {children}
@@ -48,19 +74,78 @@ function useCountries() {
 
   if (context === undefined)
     throw new Error(
-      'CountriesContext was used outside of the CountriesContext'
+      'CountriesContext was used outside of the CountriesProvider'
     );
 
   return context;
 }
 
-function reducer(state = initialState, action) {
+function reducer(state, action) {
   switch (action.type) {
-    case '':
-      return { ...state };
+    case 'data/received':
+      return {
+        ...state,
+        countries: action.payload.countries,
+        questions: action.payload.questions,
+        status: 'ready',
+      };
+    case 'data/failed':
+      return { ...state, status: 'error' };
+    case 'quiz/start':
+      return {
+        ...state,
+        status: 'active',
+        secondsRemaining: 30,
+      };
+    case 'quiz/newAnswer':
+      return {
+        ...state,
+        answer: action.payload,
+        correctAnswers:
+          action.payload === state.questions.at(state.index).countryName
+            ? state.correctAnswers + 1
+            : state.correctAnswers,
+      };
+    case 'quiz/nextQuestion':
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
+        secondsRemaining: 30,
+      };
+    case 'quiz/finished':
+      return {
+        ...state,
+        status: 'finished',
+        answer: null,
+        bestResult:
+          state.correctAnswers > state.bestResult
+            ? state.correctAnswers
+            : state.bestResult,
+      };
+    case 'quiz/restart':
+      return {
+        ...state,
+        status: 'ready',
+        questions: getQuestions(state.countries),
+        index: 0,
+        answer: null,
+        correctAnswers: 0,
+        secondsRemaining: null,
+      };
+
+    case 'quiz/timer':
+      return {
+        ...state,
+
+        index: 0,
+        answer: null,
+        correctAnswers: 0,
+        secondsRemaining: null,
+      };
 
     default:
-      return state;
+      throw new Error('Unknown action');
   }
 }
 

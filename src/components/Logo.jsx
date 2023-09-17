@@ -6,7 +6,7 @@ const StyledLogo = styled.img`
 `;
 
 function Logo() {
-  return <StyledLogo src="../public/logo.png" alt="App logo" />;
+  return <StyledLogo src="/logo.png" alt="App logo" />;
 }
 
 export default Logo;

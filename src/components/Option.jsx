@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const Option = styled.li`
+const Option = styled.button`
   border-radius: 3rem;
   padding: 1.6rem 2.4rem;
   color: var(--color-grey-900);

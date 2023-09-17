@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import Button from './Button';
 import TextContainer from './TextContainer';
+import { useCountries } from '../context/CountriesContext';
 
 const StyledFinishScreen = styled.div`
   display: flex;
@@ -36,13 +37,22 @@ const AlignButton = styled(Button)`
 `;
 
 function FinishScreen() {
+  const { questions, correctAnswers, bestResult, dispatch } = useCountries();
+
   return (
     <StyledFinishScreen>
       <TextContainer type="score">
-        <Text color="dark">You scored 110 out of 280 (40%)</Text>
+        <Text color="dark">
+          You have {correctAnswers} correct answers from {questions.length}{' '}
+          questions (
+          {Number.parseInt((correctAnswers * 100) / questions.length)}
+          %)
+        </Text>
       </TextContainer>
-      <Text>(High score: 110 points)</Text>
-      <AlignButton>Restart quiz</AlignButton>
+      <Text>(Best result: {bestResult} correct answer)</Text>
+      <AlignButton onClick={() => dispatch({ type: 'quiz/restart' })}>
+        Restart quiz
+      </AlignButton>
     </StyledFinishScreen>
   );
 }

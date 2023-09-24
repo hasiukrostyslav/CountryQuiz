@@ -1,19 +1,24 @@
 const QUESTIONS_COUNT = 30;
-const WRONG_OPTIONS = 3;
+const WRONG_OPTIONS_COUNT = 3;
+
+function getDataCopy(data) {
+  return data.filter((country) => country.unMember).slice();
+}
 
 export function getQuestions(data) {
-  const countries = data.slice();
+  const countries = getDataCopy(data);
 
-  const questions = Array.from({ length: QUESTIONS_COUNT }).map((e, i) => {
+  const questions = Array.from({ length: QUESTIONS_COUNT }).map(() => {
     const country = countries
       .splice(Math.floor(Math.random() * countries.length), 1)
       .at(0);
 
-    const options = getOptions(data, country.name.common);
+    const options = getOptions(data, country);
 
     return {
       countryName: country.name.common,
       countryFlag: country.flags.png,
+      region: country.region,
       options,
     };
   });
@@ -22,28 +27,24 @@ export function getQuestions(data) {
 }
 
 function getOptions(data, correctAnswer) {
-  // console.log(correctAnswer);
-  const filteredData = data.filter(
-    (country) => country.name.common !== correctAnswer
+  const {
+    name: { common: correctCountry },
+    region,
+  } = correctAnswer;
+
+  const filteredData = getDataCopy(data).filter(
+    (country) =>
+      country.name.common !== correctCountry && country.region === region
   );
 
-  const optionsWrong = Array.from({ length: WRONG_OPTIONS }).map(
-    (el, i, arr) => {
-      if (
-        !arr.includes(
-          filteredData.at(Math.floor(Math.random() * filteredData.length)).name
-            .common
-        )
-      )
-        return filteredData.at(Math.floor(Math.random() * filteredData.length))
-          .name?.common;
-      return filteredData.at(
-        Math.floor(Math.random() * filteredData.length) - 1
-      );
-    }
-  );
+  const wrongOptions = Array.from({ length: WRONG_OPTIONS_COUNT }).map(() => {
+    const option = filteredData
+      .splice(Math.floor(Math.random() * filteredData.length), 1)
+      .at(0).name.common;
+    return option;
+  });
 
-  const options = shuffleOptions([correctAnswer, ...optionsWrong]);
+  const options = shuffleOptions([correctCountry, ...wrongOptions]);
 
   return options;
 }
@@ -57,4 +58,10 @@ function shuffleOptions(options) {
   return options;
 }
 
-function countdownTimer() {}
+// function countdownTimer(time) {
+//   const interval = setInterval(() => console.log(time--), 1000);
+
+//   clearInterval(interval);
+// }
+
+// countdownTimer(10);

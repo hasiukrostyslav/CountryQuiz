@@ -29,9 +29,14 @@ function CountriesProvider({ children }) {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+
     async function fetchingCountries() {
       try {
-        const res = await fetch('https://restcountries.com/v3.1/all');
+        const res = await fetch('https://restcountries.com/v3.1/all', {
+          signal,
+        });
         if (!res.ok) throw new Error();
 
         const data = await res.json();
@@ -43,12 +48,17 @@ function CountriesProvider({ children }) {
           payload: { countries: data, questions },
         });
       } catch (error) {
-        dispatch({ type: 'data/failed' });
-        console.log(error);
+        if (error.name !== 'AbortError') {
+          dispatch({ type: 'data/failed' });
+        }
       }
     }
 
     fetchingCountries();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (
@@ -137,11 +147,9 @@ function reducer(state, action) {
     case 'quiz/timer':
       return {
         ...state,
-
-        index: 0,
-        answer: null,
-        correctAnswers: 0,
-        secondsRemaining: null,
+        secondsRemaining:
+          state.secondsRemaining < 1 ? 0 : state.secondsRemaining - 1,
+        answer: state.secondsRemaining === 1 ? ' ' : state.answer,
       };
 
     default:

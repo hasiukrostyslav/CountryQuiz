@@ -13,8 +13,7 @@ const StyledQuestionOptions = styled.div`
 `;
 
 function QuestionOptions() {
-  const { questions, index, answer, dispatch, secondsRemaining } =
-    useCountries();
+  const { questions, index, answer, dispatch } = useCountries();
 
   const currentQuestion = questions.at(index);
   const correctAnswer = currentQuestion.countryName;

@@ -8,6 +8,7 @@ const StyledFooter = styled.footer`
   align-items: center;
   justify-content: space-between;
   margin-top: 3rem;
+  height: 5.5rem;
 `;
 
 function Footer() {

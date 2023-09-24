@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+
+import { useCountries } from '../context/CountriesContext';
 import Heading from './Heading';
 import Button from './Button';
-import { useCountries } from '../context/CountriesContext';
 
 const StyledStartScreen = styled.section`
   display: flex;

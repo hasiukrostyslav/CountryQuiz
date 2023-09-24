@@ -1,5 +1,6 @@
-import { IoWarningOutline } from 'react-icons/io5';
 import styled from 'styled-components';
+import { IoWarningOutline } from 'react-icons/io5';
+
 import TextContainer from './TextContainer';
 
 const ErrorIcon = styled(IoWarningOutline)`

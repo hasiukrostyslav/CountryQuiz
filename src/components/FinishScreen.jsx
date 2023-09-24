@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
+
+import { useCountries } from '../context/CountriesContext';
 import Button from './Button';
 import TextContainer from './TextContainer';
-import { useCountries } from '../context/CountriesContext';
 
 const StyledFinishScreen = styled.div`
   display: flex;

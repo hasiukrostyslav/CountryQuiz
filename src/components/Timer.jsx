@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
-import styled from 'styled-components';
-import { useCountries } from '../context/CountriesContext';
 
-const StyledTimer = styled.div``;
+import { useCountries } from '../context/CountriesContext';
 
 function Timer() {
   const { answer, secondsRemaining, dispatch } = useCountries();
@@ -18,7 +16,7 @@ function Timer() {
     return () => clearInterval(timer);
   }, [secondsRemaining, answer, dispatch]);
 
-  return <StyledTimer>{secondsRemaining}</StyledTimer>;
+  return <div>{secondsRemaining}</div>;
 }
 
 export default Timer;

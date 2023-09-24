@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { useCountries } from '../context/CountriesContext';
 
 const StyledTopBar = styled.div`

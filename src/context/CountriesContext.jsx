@@ -35,9 +35,12 @@ function CountriesProvider({ children }) {
 
     async function fetchingCountries() {
       try {
-        const res = await fetch('https://restcountries.com/v3.1/all', {
-          signal,
-        });
+        const res = await fetch(
+          'https://restcountries.com/v3.1/all?fields=name,unMember,flags,region',
+          {
+            signal,
+          }
+        );
         if (!res.ok) throw new Error();
 
         const data = await res.json();

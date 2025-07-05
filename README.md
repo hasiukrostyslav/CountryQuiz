@@ -12,4 +12,4 @@
 - [Styled Components](https://styled-components.com/) - version 6.0.7
 - [React Icons](https://react-icons.github.io/react-icons/) - version 4.11.0
 - [React Countdown Circle Timer](https://www.npmjs.com/package/react-countdown-circle-timer)- version 3.2.1
-- [Vite.js](https://vitejs.dev/) - version 4.4.5
+- [Vite.js](https://vitejs.dev/) - version 7.0.2
